@@ -1,0 +1,71 @@
+
+import json
+
+products = []
+
+try:
+    with open("data.json", "r") as file:
+        products = json.load(file)
+except:
+    print("База пуста, создаем новую")
+    products = [
+    {"name": "Молоко", "price": "80", "stock": "10"},
+    {"name": "Хлеб", "price": "50", "stock": "30"},
+    {"name": "Сникерс", "price": "150", "stock": "20"}
+]
+
+
+#products.append({"name": "Кола", "price": "100", "stock": "5"})
+
+#bad_snikers = {"name": "Сникерс", "price": "150", "stock": "20"}
+#products.remove(bad_snikers)
+
+def show_all_products():
+    total_money = 0
+    print(f"--- В БАЗЕ СЕЙЧАС {len(products)} товаров ---. ")
+    for product in products:
+        print(f"Товар: {product['name']}, Цена: {product['price']}, Количество: {product['stock']}.")
+        if int(product["stock"]) < 15:
+            print(f"⚠️ ВНИМАНИЕ: {product['name']} заканчивается! осталось всего {(product['stock'])} штук. ")
+        try:
+            current_sum = int(product["price"]) * int(product["stock"])
+            total_money += current_sum
+        except:
+            print("Ошибка: цена или количество должны быть числами!")
+            continue
+    print(total_money)
+
+def add_new_product(name, price, stock):
+    products.append({"name": name, "price": price, "stock": stock})
+    with open("data.json", "w") as file:
+        json.dump(products, file)
+
+def delete_product(name):
+    for product in products:
+        if product["name"] == name:
+            products.remove(product)
+    with open("data.json", "w") as file:
+        json.dump(products, file)
+
+while True:
+    print("--- MENU --- ")
+    print("1 - Show all products")
+    print("2 - Add new product")
+    print("3 - Delete product")
+    print("4 - Exit")
+    user = input()
+    if user == "1":
+        show_all_products()
+    elif user == "2":
+        new_name = input("Name: ")
+        new_price = int(input("price: "))
+        new_stock = int(input("stock: "))
+        add_new_product(new_name, new_price, new_stock)
+    elif user == "3":
+        del_name = input("Enter name to delete: ")
+        delete_product(del_name)
+    elif user == "4":
+        print("Goodbye!")
+        break
+    else:
+        print("Not a valid choice")
