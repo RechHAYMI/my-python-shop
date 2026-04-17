@@ -47,12 +47,39 @@ def delete_product(name):
     with open("data.json", "w") as file:
         json.dump(products, file)
 
+def edit_product(name):
+    found = False
+    for product in products:
+        if product["name"] == name:
+            found = True
+            print("1 - Change the price")
+            print("2 - Change the quantity") 
+            choise = input()
+            if choise == "1":
+                try:
+                    new_p = int(input("Введите новую цену: "))
+                    product["price"] = new_p
+                except ValueError:
+                    print("Ошибка нужно вводить только цифры")
+            elif choise == "2":
+                try:
+                    new_s = int(input("Введите новое количество: "))
+                    product["stock"] = new_s
+                except ValueError:
+                    print("Ошибка нужно вводить только цифры")
+    if not found:
+        print("К сожалению товар не найден")
+    with open("data.json", "w") as file:
+        json.dump(products, file)
+            
+
 while True:
     print("--- MENU --- ")
     print("1 - Show all products")
     print("2 - Add new product")
     print("3 - Delete product")
-    print("4 - Exit")
+    print("4 - Edit product")
+    print("5 - Exit")
     user = input()
     if user == "1":
         show_all_products()
@@ -65,6 +92,9 @@ while True:
         del_name = input("Enter name to delete: ")
         delete_product(del_name)
     elif user == "4":
+        name_to_edit = input("Какой товар редактируем?: ")
+        edit_product(name_to_edit)
+    elif user == "5":
         print("Goodbye!")
         break
     else:
