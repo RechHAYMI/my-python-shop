@@ -27,13 +27,17 @@ def show_all_products():
         print(f"Товар: {product['name']}, Цена: {product['price']}, Количество: {product['stock']}.")
         if int(product["stock"]) < 15:
             print(f"⚠️ ВНИМАНИЕ: {product['name']} заканчивается! осталось всего {(product['stock'])} штук. ")
+        final_price = int(product["price"])
+        if int(product["stock"]) > 20:
+            final_price = int(final_price * 0.9)
+            print(f"АКЦИЯ! {product['name']} сегодня по {final_price}")
         try:
-            current_sum = int(product["price"]) * int(product["stock"])
+            current_sum = final_price * int(product["stock"])
             total_money += current_sum
         except:
             print("Ошибка: цена или количество должны быть числами!")
             continue
-    print(total_money)
+    print(f"--- ОБЩАЯ СУММА ТОВАРОВ: {total_money}")
 
 def add_new_product(name, price, stock):
     products.append({"name": name, "price": price, "stock": stock})
